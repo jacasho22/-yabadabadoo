@@ -240,7 +240,7 @@ export default function FAQPage() {
               <h3 className="text-3xl font-black text-dark mb-4 tracking-tighter">{locale === 'es' ? '¿Sigues con dudas?' : 'Still have questions?'}</h3>
               <p className="text-xl text-gray-400 mb-10 max-w-sm mx-auto font-medium">{locale === 'es' ? 'Nuestro equipo está listo para ayudarte personalmente.' : 'Our team is ready to help you personally.'}</p>
               <a 
-                href="https://wa.me/34600000000" 
+                href="https://wa.me/34645613670" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="btn btn-primary px-10 py-5 rounded-2xl text-lg shadow-2xl shadow-primary/20 hover:scale-105 transition-transform inline-flex"

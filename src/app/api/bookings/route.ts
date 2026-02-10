@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
 
     // Calculate price (simplified - should match frontend logic)
     const days = Math.ceil((new Date(endDate).getTime() - new Date(startDate).getTime()) / (1000 * 60 * 60 * 24));
-    const pricePerDay = 8900; // cents
+    const pricePerDay = 14000; // cents
     const totalPrice = days * pricePerDay;
 
     // Create booking

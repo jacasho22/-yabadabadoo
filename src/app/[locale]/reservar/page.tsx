@@ -16,7 +16,7 @@ import 'react-day-picker/dist/style.css';
 
 // Pricing (in cents)
 const PRICING = {
-  perDay: 8900,      // 89€
+  perDay: 14000,      // 140€
   perWeek: 54900,    // 549€ (7 days)
   perMonth: 189900,  // 1899€ (30 days)
 };

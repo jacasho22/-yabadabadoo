@@ -221,7 +221,7 @@ export default function CamperPage() {
                 <div>
                   <div className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-1">Precio</div>
                   <div className="flex items-baseline gap-2">
-                    <span className="text-4xl font-black text-primary">89€</span>
+                    <span className="text-4xl font-black text-primary">140€</span>
                     <span className="text-gray-400 text-lg font-medium">/ día</span>
                   </div>
                 </div>
