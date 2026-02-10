@@ -1,0 +1,75 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Camper {
+  id            String    @id @default(cuid())
+  name          String
+  slug          String    @unique
+  descriptionEs String    @db.Text
+  descriptionEn String    @db.Text
+  features      Json
+  images        String[]
+  pricePerDay   Int
+  pricePerWeek  Int
+  pricePerMonth Int
+  active        Boolean   @default(true)
+  bookings      Booking[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Booking {
+  id            String        @id @default(cuid())
+  camper        Camper        @relation(fields: [camperId], references: [id])
+  camperId      String
+  startDate     DateTime
+  endDate       DateTime
+  totalPrice    Int
+  status        BookingStatus @default(PENDING)
+  paymentMethod PaymentMethod
+  paymentId     String?
+  customer      Customer      @relation(fields: [customerId], references: [id])
+  customerId    String
+  notes         String?       @db.Text
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+model Customer {
+  id        String    @id @default(cuid())
+  email     String    @unique
+  name      String
+  phone     String
+  dni       String?
+  license   String?
+  bookings  Booking[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model BlockedDate {
+  id        String   @id @default(cuid())
+  camperId  String
+  date      DateTime
+  reason    String?
+  createdAt DateTime @default(now())
+
+  @@unique([camperId, date])
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
+}
+
+enum PaymentMethod {
+  STRIPE
+  PAYPAL
+}

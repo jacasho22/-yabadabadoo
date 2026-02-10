@@ -1,26 +1,195 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@700;800;900&display=swap');
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@theme {
+  --color-primary: #2d5a27;      /* Moss Green */
+  --color-primary-light: #4c8c41; /* Light Moss */
+  --color-primary-dark: #1b3617;  /* Dark Moss */
+  --color-secondary: #f4a259;    /* Earth Orange */
+  --color-accent: #5b8c5a;       /* Sage Green */
+  --color-dark: #0f1115;         /* Rich Obsidian */
+  --color-light: #fdfdfc;        /* Off White */
+  
+  --font-display: "Outfit", sans-serif;
+  --font-body: "Inter", sans-serif;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --spacing-section: clamp(4rem, 10vw, 10rem);
+  --spacing-container: clamp(1rem, 5vw, 2rem);
+  
+  --radius-sm: 0.375rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1.25rem;
+  --radius-xl: 2rem;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  --animate-float: float 6s ease-in-out infinite;
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
   }
 }
 
+:root {
+  --background: #fdfdfc;
+  --foreground: #0f1115;
+  --primary-rgb: 45, 90, 39;
+  --secondary-rgb: 244, 162, 89;
+  
+  --color-primary: #2d5a27;
+  --color-primary-light: #4c8c41;
+  --color-primary-dark: #1b3617;
+  --color-secondary: #f4a259;
+  --color-accent: #5b8c5a;
+  --color-dark: #0f1115;
+  --color-light: #fdfdfc;
+  
+  color-scheme: light;
+}
+
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.container-main {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 var(--spacing-container);
+}
+
+.section-padding {
+  padding: var(--spacing-section) 0;
+}
+
+/* Glassmorphism */
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dark .glass {
+  background: rgba(15, 17, 21, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Premium Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.625rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+  padding: 1rem 2rem;
+  border-radius: var(--radius-md);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  color: white;
+  box-shadow: 0 4px 14px 0 rgba(45, 90, 39, 0.25);
+}
+
+.btn-primary:hover {
+  background-color: #366b2f;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px 0 rgba(45, 90, 39, 0.35);
+}
+
+.btn-secondary {
+  background-color: var(--color-secondary);
+  color: var(--color-dark);
+  box-shadow: 0 4px 14px 0 rgba(244, 162, 89, 0.25);
+}
+
+.btn-secondary:hover {
+  background-color: #f6b679;
+  transform: translateY(-2px);
+}
+
+/* Text Gradients */
+.text-gradient {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-gold {
+  background: linear-gradient(135deg, #f4a259 0%, #ff8e3c 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Shadows */
+.shadow-premium {
+  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.1);
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 10px;
+  border: 2px solid var(--background);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* React Day Picker Visibility Fix */
+.rdp {
+  --rdp-cell-size: 45px;
+  --rdp-accent-color: var(--color-primary);
+  --rdp-background-color: var(--color-primary-light);
+  margin: 0;
+}
+
+.rdp-day {
+  color: var(--color-dark) !important;
+  font-weight: 600;
+}
+
+.rdp-day_selected, .rdp-day_selected:hover {
+  color: white !important;
+}
+
+.rdp-day_disabled {
+  color: #d1d5db !important;
+  opacity: 0.5;
+}
+
+.rdp-button:hover:not([disabled]):not(.rdp-day_selected) {
+  background-color: rgba(var(--primary-rgb), 0.1);
+}
+
+.rdp-head_cell {
+  color: var(--color-primary);
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
 }

@@ -1,0 +1,9 @@
+Por favor, coloca aquí tus imágenes con los siguientes nombres para que la web las reconozca:
+
+1. logo.png (El logotipo de la web)
+2. camper-rear.jpg (Vista trasera con paisaje/mar)
+3. camper-side.jpg (Vista lateral de la camper)
+4. camper-awning.jpg (Vista con el toldo desplegado)
+5. camper-interior.jpg (Vista del interior)
+
+Una vez guardadas aquí, recarga la página y aparecerán automáticamente.

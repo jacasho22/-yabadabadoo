@@ -1,0 +1,125 @@
+{
+  "nav": {
+    "home": "Home",
+    "camper": "The Camper",
+    "book": "Book",
+    "routes": "Routes",
+    "faq": "FAQ"
+  },
+  "hero": {
+    "title": "Your next adventure starts here",
+    "subtitle": "Wake up wherever you want. No rush, no fixed routes, no limits.",
+    "cta": "Check availability"
+  },
+  "home": {
+    "intro": {
+      "title": "Freedom has wheels",
+      "description": "Yabadabadoo Campers was born from a passion: living the road without rushing or fixed destinations. A fully equipped camper so you only have to worry about choosing the next sunset."
+    },
+    "features": {
+      "title": "Everything you need",
+      "bed": "Double bed",
+      "shower": "Built-in shower",
+      "kitchen": "Full kitchen",
+      "equipment": "Utensils included"
+    }
+  },
+  "camper": {
+    "title": "Meet Yaba",
+    "intro": "A 2024 Fiat Ducato, fully equipped with everything you need to live the road. Double bed, shower, full kitchen. You just need to pick the destination.",
+    "specs": {
+      "title": "Specifications",
+      "year": "Year",
+      "brand": "Brand",
+      "model": "Model",
+      "capacity": "Capacity",
+      "people": "2 people"
+    },
+    "gallery": "See more photos",
+    "cta": "Book now"
+  },
+  "booking": {
+    "title": "Book your adventure",
+    "selectDates": "Select your dates",
+    "startDate": "Start date",
+    "endDate": "End date",
+    "nights": "nights",
+    "total": "Total",
+    "perDay": "/day",
+    "perWeek": "/week",
+    "perMonth": "/month",
+    "available": "Available",
+    "unavailable": "Unavailable",
+    "bookNow": "Book now",
+    "customerInfo": "Your details",
+    "name": "Full name",
+    "email": "Email",
+    "phone": "Phone",
+    "dni": "ID/Passport",
+    "license": "Driver's license",
+    "payment": "Payment",
+    "payWith": "Pay with",
+    "processing": "Processing...",
+    "success": "Booking confirmed!",
+    "successMessage": "We've sent you an email with all the details.",
+    "next": "Next",
+    "back": "Back",
+    "yourTrip": "Your Trip",
+    "selectDatesPrompt": "Select dates to calculate",
+    "day": "Day",
+    "week": "Week",
+    "month": "Month",
+    "securePaymentInfo": "Secure payment guaranteed. No hidden deposits or surprises.",
+    "backToHome": "Back to home"
+  },
+  "faq": {
+    "title": "Frequently asked questions",
+    "categories": {
+      "booking": "Bookings",
+      "payment": "Payments",
+      "usage": "Using the camper",
+      "cancellation": "Cancellations"
+    },
+    "items": {
+      "howToBook": {
+        "question": "How do I book the camper?",
+        "answer": "Select your dates on the calendar, fill in your details and make the payment. You'll receive immediate confirmation by email."
+      },
+      "paymentMethods": {
+        "question": "What payment methods do you accept?",
+        "answer": "We accept credit/debit cards through Stripe and PayPal."
+      },
+      "deposit": {
+        "question": "Is there a deposit?",
+        "answer": "Yes, a €500 deposit is required which is fully refunded after checking the camper's condition."
+      },
+      "cancellation": {
+        "question": "What is your cancellation policy?",
+        "answer": "Free cancellation up to 14 days before. Between 7-14 days, 50% refund. Less than 7 days, no refund."
+      },
+      "included": {
+        "question": "What's included?",
+        "answer": "Bedding, towels, kitchenware, camping table and chairs, cleaning kit and comprehensive insurance."
+      },
+      "pickup": {
+        "question": "Where do I pick up the camper?",
+        "answer": "Pick-up and drop-off is at our location. We'll send you the exact address after confirming your booking."
+      }
+    }
+  },
+  "footer": {
+    "legal": "Legal notice",
+    "privacy": "Privacy",
+    "cookies": "Cookies",
+    "terms": "Rental terms",
+    "rights": "All rights reserved"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "retry": "Retry",
+    "back": "Back",
+    "next": "Next",
+    "confirm": "Confirm"
+  }
+}

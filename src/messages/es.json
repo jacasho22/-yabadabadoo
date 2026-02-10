@@ -1,0 +1,125 @@
+{
+  "nav": {
+    "home": "Inicio",
+    "camper": "La Camper",
+    "book": "Reservar",
+    "routes": "Rutas",
+    "faq": "FAQ"
+  },
+  "hero": {
+    "title": "Tu próxima aventura empieza aquí",
+    "subtitle": "Despierta donde quieras. Sin prisas, sin rutas fijas, sin límites.",
+    "cta": "Ver disponibilidad"
+  },
+  "home": {
+    "intro": {
+      "title": "La libertad tiene ruedas",
+      "description": "Yabadabadoo Campers nace de una pasión: vivir la carretera sin prisas ni destinos fijos. Una camper equipada para que solo tengas que preocuparte de elegir el próximo atardecer."
+    },
+    "features": {
+      "title": "Todo lo que necesitas",
+      "bed": "Cama doble",
+      "shower": "Ducha integrada",
+      "kitchen": "Cocina completa",
+      "equipment": "Utensilios incluidos"
+    }
+  },
+  "camper": {
+    "title": "Conoce a Yaba",
+    "intro": "Una Fiat Ducato de 2024, equipada con todo lo que necesitas para vivir la carretera. Cama doble, ducha, cocina completa. Solo falta que elijas el destino.",
+    "specs": {
+      "title": "Especificaciones",
+      "year": "Año",
+      "brand": "Marca",
+      "model": "Modelo",
+      "capacity": "Capacidad",
+      "people": "2 personas"
+    },
+    "gallery": "Ver más fotos",
+    "cta": "Reservar ahora"
+  },
+  "booking": {
+    "title": "Reserva tu aventura",
+    "selectDates": "Selecciona tus fechas",
+    "startDate": "Fecha de inicio",
+    "endDate": "Fecha de fin",
+    "nights": "noches",
+    "total": "Total",
+    "perDay": "/día",
+    "perWeek": "/semana",
+    "perMonth": "/mes",
+    "available": "Disponible",
+    "unavailable": "No disponible",
+    "bookNow": "Reservar ahora",
+    "customerInfo": "Tus datos",
+    "name": "Nombre completo",
+    "email": "Email",
+    "phone": "Teléfono",
+    "dni": "DNI/Pasaporte",
+    "license": "Carné de conducir",
+    "payment": "Pago",
+    "payWith": "Pagar con",
+    "processing": "Procesando...",
+    "success": "¡Reserva confirmada!",
+    "successMessage": "Te hemos enviado un email con todos los detalles.",
+    "next": "Siguiente",
+    "back": "Volver",
+    "yourTrip": "Tu Reserva",
+    "selectDatesPrompt": "Selecciona tus fechas para calcular",
+    "day": "Día",
+    "week": "Semana",
+    "month": "Mes",
+    "securePaymentInfo": "Pago seguro garantizado. Sin depósitos ocultos ni sorpresas.",
+    "backToHome": "Volver al inicio"
+  },
+  "faq": {
+    "title": "Preguntas frecuentes",
+    "categories": {
+      "booking": "Reservas",
+      "payment": "Pagos",
+      "usage": "Uso de la camper",
+      "cancellation": "Cancelaciones"
+    },
+    "items": {
+      "howToBook": {
+        "question": "¿Cómo reservo la camper?",
+        "answer": "Selecciona tus fechas en el calendario, completa tus datos y realiza el pago. Recibirás confirmación inmediata por email."
+      },
+      "paymentMethods": {
+        "question": "¿Qué métodos de pago aceptáis?",
+        "answer": "Aceptamos tarjeta de crédito/débito a través de Stripe y PayPal."
+      },
+      "deposit": {
+        "question": "¿Hay fianza?",
+        "answer": "Sí, se requiere una fianza de 500€ que se devuelve íntegramente tras comprobar el estado de la camper."
+      },
+      "cancellation": {
+        "question": "¿Cuál es la política de cancelación?",
+        "answer": "Cancelación gratuita hasta 14 días antes. Entre 7-14 días, reembolso del 50%. Menos de 7 días, no hay reembolso."
+      },
+      "included": {
+        "question": "¿Qué está incluido?",
+        "answer": "Ropa de cama, toallas, utensilios de cocina, mesa y sillas de camping, kit de limpieza y seguro a todo riesgo."
+      },
+      "pickup": {
+        "question": "¿Dónde recojo la camper?",
+        "answer": "La recogida y entrega se realiza en nuestra ubicación. Te enviaremos la dirección exacta tras confirmar la reserva."
+      }
+    }
+  },
+  "footer": {
+    "legal": "Aviso legal",
+    "privacy": "Privacidad",
+    "cookies": "Cookies",
+    "terms": "Condiciones de alquiler",
+    "rights": "Todos los derechos reservados"
+  },
+  "common": {
+    "loading": "Cargando...",
+    "error": "Ha ocurrido un error",
+    "retry": "Reintentar",
+    "back": "Volver",
+    "next": "Siguiente",
+    "confirm": "Confirmar"
+  }
+}
