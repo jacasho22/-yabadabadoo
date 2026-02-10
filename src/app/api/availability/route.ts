@@ -44,8 +44,8 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json({
       available: isAvailable,
-      blockedDates: blockedDates.map(d => d.date.toISOString()),
-      existingBookings: existingBookings.map(b => ({
+      blockedDates: blockedDates.map((d: { date: Date }) => d.date.toISOString()),
+      existingBookings: existingBookings.map((b: { startDate: Date; endDate: Date }) => ({
         start: b.startDate.toISOString(),
         end: b.endDate.toISOString(),
       })),
