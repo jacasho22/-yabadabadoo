@@ -17,8 +17,8 @@ import 'react-day-picker/dist/style.css';
 // Pricing (in cents)
 const PRICING = {
   perDay: 14000,      // 140€
-  perWeek: 54900,    // 549€ (7 days)
-  perMonth: 189900,  // 1899€ (30 days)
+  perWeek: 98000,    // 980€ (7 days)
+  perMonth: 420000,  // 4200€ (30 days)
 };
 
 // Mock blocked dates
