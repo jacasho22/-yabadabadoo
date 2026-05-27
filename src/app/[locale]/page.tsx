@@ -14,7 +14,7 @@ export default function Home() {
     initial: { opacity: 0, y: 20 },
     whileInView: { opacity: 1, y: 0 },
     viewport: { once: true, margin: '-100px' },
-    transition: { duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] }
+    transition: { duration: 0.8, ease: "easeOut" }
   };
 
   const stagger = {
@@ -51,7 +51,7 @@ export default function Home() {
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.2, ease: [0.25, 0.46, 0.45, 0.94] }}
+            transition={{ duration: 1.2, ease: "easeOut" }}
             className="max-w-3xl mx-auto lg:mx-0 text-center lg:text-left"
           >
             <p className="text-white/70 text-sm font-medium tracking-[0.2em] uppercase mb-6">
