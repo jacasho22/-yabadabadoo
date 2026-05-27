@@ -15,6 +15,7 @@ export default function Header() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const pathname = usePathname();
+  
   const darkHeroRoutes = [
     `/${locale}`,
     `/${locale}/`,
@@ -45,15 +46,13 @@ export default function Header() {
 
   return (
     <header 
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled || forceSolid ? 'py-3 glass shadow-premium' : 'py-6 bg-transparent'
-      }`}
+      className="fixed top-0 left-0 right-0 z-[100] py-3 bg-white shadow-sm"
     >
       <div className="container-main">
         <nav className="flex items-center justify-between">
           {/* Logo */}
-          <Link href={`/${locale}`} className="group flex items-center gap-2">
-            <div className="relative w-40 h-12">
+          <Link href={`/${locale}`} className="flex items-center gap-2">
+            <div className="relative w-36 h-10">
               <Image 
                 src="/images/logo.jpeg" 
                 alt="Yabadabadoo Campers" 
@@ -64,73 +63,70 @@ export default function Header() {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-10">
-            <div className="flex items-center gap-8">
+          <div className="hidden md:flex items-center gap-12">
+            <div className="flex items-center gap-10">
               {navItems.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`text-sm font-semibold tracking-wide hover:text-secondary transition-colors duration-300 ${
-                    scrolled || forceSolid ? 'text-dark' : 'text-white'
-                  }`}
+                  className="text-sm font-medium text-black hover:opacity-60 transition-opacity"
                 >
                   {item.label}
                 </Link>
               ))}
             </div>
             
-            <div className="h-6 w-px bg-white/20" />
-            
             <div className="flex items-center gap-6">
-              <LanguageSwitcher isScrolled={scrolled || forceSolid} />
+              <LanguageSwitcher isScrolled={true} />
               <Link 
                 href={`/${locale}/reservar`} 
-                className={`btn btn-primary text-sm py-2.5 px-6 rounded-full group`}
+                className="btn btn-primary text-sm py-2.5 px-6"
               >
-                <Calendar size={16} className="group-hover:scale-110 transition-transform" />
+                <Calendar size={16} />
                 {t('book')}
               </Link>
             </div>
           </div>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile Menu Button - SUPER VISIBLE */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className={`md:hidden p-2 rounded-lg transition-colors ${
-              scrolled || forceSolid ? 'text-dark hover:bg-gray-100' : 'text-white hover:bg-white/10'
-            }`}
+            className="md:hidden p-3 bg-black text-white rounded-xl shadow-lg hover:bg-gray-800 transition-all"
             aria-label="Toggle menu"
           >
-            {isOpen ? <X size={26} /> : <Menu size={26} />}
+            {isOpen ? <X size={28} /> : <Menu size={28} />}
           </button>
         </nav>
 
-        {/* Mobile Navigation */}
+        {/* Mobile Navigation - FULL SCREEN */}
         <AnimatePresence>
           {isOpen && (
             <motion.div 
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              className="md:hidden overflow-hidden bg-white/95 backdrop-blur-xl mt-4 rounded-2xl shadow-2xl border border-white/20"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="md:hidden absolute top-full left-0 right-0 bg-white border-t border-gray-100 shadow-xl"
             >
-              <div className="flex flex-col p-6 gap-6">
+              <div className="flex flex-col p-6 gap-5">
                 {navItems.map((item) => (
                   <Link
                     key={item.href}
                     href={item.href}
                     onClick={() => setIsOpen(false)}
-                    className="text-lg font-semibold text-dark hover:text-primary py-2 border-b border-gray-100"
+                    className="text-lg font-semibold text-black py-3 border-b border-gray-100 last:border-0"
                   >
                     {item.label}
                   </Link>
                 ))}
-                <div className="flex items-center justify-between pt-4">
-                  <LanguageSwitcher isScrolled={true} />
+                <div className="flex flex-col gap-4 pt-4">
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-gray-500">Idioma</span>
+                    <LanguageSwitcher isScrolled={true} />
+                  </div>
                   <Link 
                     href={`/${locale}/reservar`} 
                     onClick={() => setIsOpen(false)}
-                    className="btn btn-primary text-sm py-3 px-8 rounded-full"
+                    className="btn btn-primary text-sm py-3 px-8 w-full justify-center"
                   >
                     {t('book')}
                   </Link>

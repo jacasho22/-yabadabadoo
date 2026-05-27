@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 import { locales, type Locale } from '../../i18n';
 import Header from '../../components/layout/Header';
 import Footer from '../../components/layout/Footer';
+import BackToTop from '../../components/layout/BackToTop';
 import "../globals.css";
 
 type Props = {
@@ -42,7 +43,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function LocaleLayout({ children, params }: Props) {
   const { locale } = await params;
-  console.log('LocaleLayout Rendering for locale:', locale);
   
   if (!locales.includes(locale as Locale)) {
     notFound();
@@ -59,6 +59,7 @@ export default async function LocaleLayout({ children, params }: Props) {
             {children}
           </main>
           <Footer />
+          <BackToTop />
         </NextIntlClientProvider>
       </body>
     </html>
