@@ -13,15 +13,13 @@ export default function Home() {
   const fadeIn = {
     initial: { opacity: 0, y: 20 },
     whileInView: { opacity: 1, y: 0 },
-    viewport: { once: true, margin: '-100px' },
-    transition: { duration: 0.8, ease: "easeOut" }
+    viewport: { once: true, margin: '-100px' }
   };
 
   const stagger = {
     initial: { opacity: 0 },
     whileInView: { opacity: 1 },
-    viewport: { once: true },
-    transition: { staggerChildren: 0.15 }
+    viewport: { once: true }
   };
 
   const featureItems = [
@@ -51,7 +49,6 @@ export default function Home() {
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.2, ease: "easeOut" }}
             className="max-w-3xl mx-auto lg:mx-0 text-center lg:text-left"
           >
             <p className="text-white/70 text-sm font-medium tracking-[0.2em] uppercase mb-6">
