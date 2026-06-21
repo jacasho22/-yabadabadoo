@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useTranslations, useLocale } from 'next-intl';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
@@ -13,20 +13,23 @@ import { DayPicker, DateRange } from 'react-day-picker';
 import { format, differenceInDays } from 'date-fns';
 import { es, enUS } from 'date-fns/locale';
 import 'react-day-picker/dist/style.css';
+import { calculateBookingPrice, calculateNights } from '@/lib/booking-pricing';
 
-// Pricing (in cents)
-const PRICING = {
-  perDay: 14000,      // 140€
-  perWeek: 98000,    // 980€ (7 days)
-  perMonth: 420000,  // 4200€ (30 days)
+type CamperType = {
+  id: string;
+  name: string;
+  slug: string;
+  descriptionEs: string;
+  descriptionEn: string;
+  features: any;
+  images: string[];
+  pricePerDay: number;
+  pricePerWeek: number;
+  pricePerMonth: number;
+  active: boolean;
+  createdAt: Date;
+  updatedAt: Date;
 };
-
-// Mock blocked dates
-const blockedDates = [
-  new Date(2026, 1, 20),
-  new Date(2026, 1, 21),
-  new Date(2026, 1, 22),
-];
 
 export default function BookingPage() {
   const t = useTranslations('booking');
@@ -44,43 +47,137 @@ export default function BookingPage() {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [campers, setCampers] = useState<CamperType[]>([]);
+  const [selectedCamper, setSelectedCamper] = useState<CamperType | null>(null);
+  const [blockedDates, setBlockedDates] = useState<Date[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Load campers and initial data
+  useEffect(() => {
+    async function loadData() {
+      try {
+        const response = await fetch('/api/campers');
+        const data = await response.json();
+        const campersData = data.campers || [];
+        
+        // If no campers, use mock camper
+        if (campersData.length === 0) {
+          const mockCamper: CamperType = {
+            id: 'mock-camper-1',
+            name: 'Camper Yaba Adventure',
+            slug: 'camper-yaba-1',
+            descriptionEs: 'Un camper completo para tus aventuras!',
+            descriptionEn: 'A complete camper for your adventures!',
+            features: {},
+            images: ['/images/camper-side.jpeg'],
+            pricePerDay: 14000,
+            pricePerWeek: 98000,
+            pricePerMonth: 420000,
+            active: true,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+          };
+          setCampers([mockCamper]);
+          setSelectedCamper(mockCamper);
+        } else {
+          setCampers(campersData);
+          setSelectedCamper(campersData.find((c: CamperType) => c.active) || campersData[0]);
+        }
+        
+        setIsLoading(false);
+      } catch (err) {
+        console.error(err);
+        // Use mock camper if fetch fails
+        const mockCamper: CamperType = {
+          id: 'mock-camper-1',
+          name: 'Camper Yaba Adventure',
+          slug: 'camper-yaba-1',
+          descriptionEs: 'Un camper completo para tus aventuras!',
+          descriptionEn: 'A complete camper for your adventures!',
+          features: {},
+          images: ['/images/camper-side.jpeg'],
+          pricePerDay: 14000,
+          pricePerWeek: 98000,
+          pricePerMonth: 420000,
+          active: true,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        };
+        setCampers([mockCamper]);
+        setSelectedCamper(mockCamper);
+        setIsLoading(false);
+      }
+    }
+    loadData();
+  }, []);
+
+  // Load blocked dates when date range or camper changes
+  useEffect(() => {
+    async function loadBlockedDates() {
+      if (!selectedCamper) return;
+      
+      try {
+        const params = new URLSearchParams({ camperId: selectedCamper.id });
+        if (dateRange?.from) {
+          params.set('startDate', dateRange.from.toISOString());
+        }
+        if (dateRange?.to) {
+          params.set('endDate', dateRange.to.toISOString());
+        }
+        
+        const response = await fetch(`/api/availability?${params.toString()}`);
+        const data = await response.json();
+        
+        const blocked = data.blockedDates.map((d: string) => new Date(d));
+        const booked = data.existingBookings.flatMap((b: any) => {
+          const dates: Date[] = [];
+          const start = new Date(b.start);
+          const end = new Date(b.end);
+          for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+            dates.push(new Date(d));
+          }
+          return dates;
+        });
+        
+        setBlockedDates([...blocked, ...booked]);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    loadBlockedDates();
+  }, [selectedCamper, dateRange]);
 
   const { nights, totalPrice, priceBreakdown } = useMemo(() => {
-    if (!dateRange?.from || !dateRange?.to) {
+    if (!dateRange?.from || !dateRange?.to || !selectedCamper) {
       return { nights: 0, totalPrice: 0, priceBreakdown: null };
     }
-    const n = differenceInDays(dateRange.to, dateRange.from);
-    if (n <= 0) return { nights: 0, totalPrice: 0, priceBreakdown: null };
-
-    let total = 0;
-    const breakdown = [];
-    
-    // Simple greedy algo (for demo)
-    let remaining = n;
-    if (remaining >= 30) {
-      const months = Math.floor(remaining / 30);
-      total += months * PRICING.perMonth;
-      breakdown.push({ type: 'month', count: months, price: PRICING.perMonth });
-      remaining %= 30;
-    }
-    if (remaining >= 7) {
-      const weeks = Math.floor(remaining / 7);
-      total += weeks * PRICING.perWeek;
-      breakdown.push({ type: 'week', count: weeks, price: PRICING.perWeek });
-      remaining %= 7;
-    }
-    if (remaining > 0) {
-      total += remaining * PRICING.perDay;
-      breakdown.push({ type: 'day', count: remaining, price: PRICING.perDay });
-    }
-    
-    return { nights: n, totalPrice: total, priceBreakdown: breakdown };
-  }, [dateRange]);
+    const pricing = calculateBookingPrice(dateRange.from, dateRange.to, {
+      pricePerDay: selectedCamper.pricePerDay,
+      pricePerWeek: selectedCamper.pricePerWeek,
+      pricePerMonth: selectedCamper.pricePerMonth,
+    });
+    return {
+      nights: pricing.nights,
+      totalPrice: pricing.totalPrice,
+      priceBreakdown: pricing.breakdown.map(item => ({
+        type: item.type,
+        count: item.count,
+        price: item.unitPrice,
+      })),
+    };
+  }, [dateRange, selectedCamper]);
 
   const isDateBlocked = (date: Date) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    return blockedDates.some(b => b.toDateString() === date.toDateString()) || date < today;
+    return blockedDates.some(b => {
+      const d1 = new Date(b);
+      d1.setHours(0, 0, 0, 0);
+      const d2 = new Date(date);
+      d2.setHours(0, 0, 0, 0);
+      return d1.toDateString() === d2.toDateString();
+    }) || date < today;
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -90,9 +187,33 @@ export default function BookingPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    await new Promise(r => setTimeout(r, 2000));
-    setIsSubmitting(false);
-    setIsSuccess(true);
+    setError(null);
+    
+    try {
+      const response = await fetch('/api/bookings', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          startDate: dateRange?.from?.toISOString(),
+          endDate: dateRange?.to?.toISOString(),
+          camperId: selectedCamper?.id,
+          customerData: formData,
+        }),
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(data.error || 'No se pudo crear la reserva');
+      }
+      
+      setIsSuccess(true);
+    } catch (err: any) {
+      console.error(err);
+      setError(err.message);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const formatPrice = (cents: number) => {
@@ -167,28 +288,69 @@ export default function BookingPage() {
               className="bg-white rounded-[2.5rem] p-8 md:p-12 shadow-premium border border-gray-50"
             >
               {step === 1 && (
-                <div className="flex flex-col items-center">
-                  <DayPicker
-                    mode="range"
-                    selected={dateRange}
-                    onSelect={setDateRange}
-                    locale={dateLocale}
-                    disabled={isDateBlocked}
-                    numberOfMonths={2}
-                    className="m-0!"
-                    modifiersStyles={{
-                      selected: { backgroundColor: 'var(--color-primary)', borderRadius: '12px' },
-                      range_middle: { backgroundColor: 'rgba(45, 90, 39, 0.1)', color: 'var(--color-primary)' },
-                    }}
-                  />
+                <div className="flex flex-col items-center gap-8">
+                  {/* Camper Selector */}
+                  {campers.length > 0 && (
+                    <div className="w-full">
+                      <label className="block text-xs font-bold uppercase tracking-widest text-gray-400 mb-3">
+                        {locale === 'es' ? 'Seleccionar Camper' : 'Select Camper'}
+                      </label>
+                      <select
+                        value={selectedCamper?.id || ''}
+                        onChange={(e) => {
+                          const camper = campers.find(c => c.id === e.target.value);
+                          setSelectedCamper(camper || null);
+                        }}
+                        className="w-full bg-gray-50 border-none rounded-2xl p-4 focus:bg-white focus:ring-2 focus:ring-primary/20 transition-all outline-none"
+                      >
+                        {campers.map((camper) => (
+                          <option key={camper.id} value={camper.id}>
+                            {camper.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
                   
-                  {nights > 0 && (
-                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-12 w-full flex justify-end">
-                      <button onClick={() => setStep(2)} className="btn btn-primary rounded-2xl px-12 group">
-                        {t('next')}
-                        <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
-                      </button>
-                    </motion.div>
+                  {/* Loading State */}
+                  {isLoading && (
+                    <div className="text-center py-20">
+                      <p className="text-gray-400 font-bold">Cargando...</p>
+                    </div>
+                  )}
+                  
+                  {!isLoading && selectedCamper && (
+                    <>
+                      <DayPicker
+                        mode="range"
+                        selected={dateRange}
+                        onSelect={setDateRange}
+                        locale={dateLocale}
+                        disabled={isDateBlocked}
+                        numberOfMonths={2}
+                        className="m-0!"
+                        modifiersStyles={{
+                          selected: { backgroundColor: 'var(--color-primary)', borderRadius: '12px' },
+                          range_middle: { backgroundColor: 'rgba(45, 90, 39, 0.1)', color: 'var(--color-primary)' },
+                        }}
+                      />
+                      
+                      {nights > 0 && (
+                        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-4 w-full flex justify-end">
+                          <button onClick={() => setStep(2)} className="btn btn-primary rounded-2xl px-12 group">
+                            {t('next')}
+                            <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
+                          </button>
+                        </motion.div>
+                      )}
+                    </>
+                  )}
+                  
+                  {/* Error State */}
+                  {error && (
+                    <div className="rounded-2xl bg-red-50 px-4 py-3 text-sm text-red-700">
+                      {error}
+                    </div>
                   )}
                 </div>
               )}

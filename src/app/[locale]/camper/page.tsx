@@ -170,11 +170,27 @@ export default function CamperPage() {
               <h2 className="text-4xl md:text-5xl font-bold mb-10 tracking-tight">
                 {locale === 'es' ? 'La vida secreta de Yaba' : 'The secret life of Yaba'}
               </h2>
-              <p className="text-xl text-gray-500 leading-relaxed mb-12">
+              <p className="text-xl text-gray-500 leading-relaxed mb-6">
                 {locale === 'es' 
                   ? 'Hemos diseñado el espacio pensando en la funcionalidad extrema sin perder el toque de hogar. Cada centímetro cuenta para tu confort.'
                   : 'We have designed the space with extreme functionality in mind without losing the home feel. Every inch counts for your comfort.'}
               </p>
+              {locale === 'es' && (
+                <div className="mb-12 space-y-4">
+                  <p className="text-lg text-gray-600 leading-relaxed">
+                    <strong>Camper pet friendly en Cuenca y Albacete:</strong> Viaja con tu mascota sin preocupaciones, nuestra furgoneta está preparada para que todos disfrutéis.
+                  </p>
+                  <p className="text-lg text-gray-600 leading-relaxed">
+                    <strong>Ideal para escapadas de fin de semana:</strong> Perfecta para planificar tu escapada de fin de semana en camper por Albacete y Cuenca.
+                  </p>
+                  <p className="text-lg text-gray-600 leading-relaxed">
+                    <strong>Alquiler camper la Manchuela:</strong> Explora Iniesta, Motilla del Palancar, Quintanar del Rey y toda la Manchuela con nuestra camper.
+                  </p>
+                  <p className="text-lg text-gray-600 leading-relaxed">
+                    <strong>Precios transparentes:</strong> 140€/día con kilometraje ilimitado, seguro a todo riesgo y kit de bienvenida incluido.
+                  </p>
+                </div>
+              )}
               
               <div className="space-y-6">
                 {features.map((section) => (

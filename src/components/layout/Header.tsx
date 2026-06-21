@@ -46,7 +46,7 @@ export default function Header() {
 
   return (
     <header 
-      className="fixed top-0 left-0 right-0 z-[100] py-3 bg-white shadow-sm"
+      className="fixed top-0 left-0 right-0 z-[100] py-3 bg-white/80 backdrop-blur-md border-b border-gray-100/50"
     >
       <div className="container-main">
         <nav className="flex items-center justify-between">
@@ -64,12 +64,12 @@ export default function Header() {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center gap-12">
-            <div className="flex items-center gap-10">
+            <div className="flex items-center gap-8">
               {navItems.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="text-sm font-medium text-black hover:opacity-60 transition-opacity"
+                  className="text-[15px] font-normal text-[#1d1d1f] hover:text-[#0071e3] transition-colors"
                 >
                   {item.label}
                 </Link>
@@ -80,21 +80,21 @@ export default function Header() {
               <LanguageSwitcher isScrolled={true} />
               <Link 
                 href={`/${locale}/reservar`} 
-                className="btn btn-primary text-sm py-2.5 px-6"
+                className="btn btn-primary text-sm py-2 px-5"
               >
-                <Calendar size={16} />
+                <Calendar size={15} />
                 {t('book')}
               </Link>
             </div>
           </div>
 
-          {/* Mobile Menu Button - SUPER VISIBLE */}
+          {/* Mobile Menu Button - Apple Style */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-3 bg-black text-white rounded-xl shadow-lg hover:bg-gray-800 transition-all"
+            className="md:hidden p-2 text-[#1d1d1f] hover:text-[#0071e3] transition-colors"
             aria-label="Toggle menu"
           >
-            {isOpen ? <X size={28} /> : <Menu size={28} />}
+            {isOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </nav>
 

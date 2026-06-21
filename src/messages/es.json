@@ -7,17 +7,17 @@
     "faq": "FAQ"
   },
   "hero": {
-    "title": "Tu próxima aventura empieza aquí",
-    "subtitle": "Despierta donde quieras. Sin prisas, sin rutas fijas, sin límites.",
+    "title": "Alquiler Camper Iniesta | Yabadabadoo Campers",
+    "subtitle": "Alquiler de furgonetas camperizadas en Iniesta, Cuenca y Albacete. Escapadas de fin de semana en camper, pet friendly y cerca de Requena y Utiel.",
     "cta": "Ver disponibilidad"
   },
   "home": {
     "intro": {
-      "title": "La libertad tiene ruedas",
-      "description": "Yabadabadoo Campers nace de una pasión: vivir la carretera sin prisas ni destinos fijos. Una camper equipada para que solo tengas que preocuparte de elegir el próximo atardecer."
+      "title": "Alquiler Camper Cuenca y Albacete",
+      "description": "Tu opción ideal de alquiler camper en la Manchuela. Ofrecemos alquiler de furgonetas camperizadas en Iniesta, alquiler camper particular en Cuenca y Albacete, perfecto para escapadas de fin de semana, viajar con perros y explorar Motilla del Palancar, Quintanar del Rey y toda la región."
     },
     "features": {
-      "title": "Todo lo que necesitas",
+      "title": "Todo lo que necesitas para tu aventura",
       "bed": "Cama doble",
       "shower": "Ducha integrada",
       "kitchen": "Cocina completa",
@@ -25,8 +25,8 @@
     }
   },
   "camper": {
-    "title": "Conoce a Yaba",
-    "intro": "Una Fiat Ducato de 2024, equipada con todo lo que necesitas para vivir la carretera. Cama doble, ducha, cocina completa. Solo falta que elijas el destino.",
+    "title": "Furgoneta Camperizada Alquiler Albacete",
+    "intro": "Conoce a Yaba, nuestra Fiat Ducato de 2024. Camper pet friendly en Cuenca y Albacete, equipada para viajar con perros. Precio de alquiler camper en Albacete y Cuenca competitivo, con kilometraje ilimitado. También cerca de Requena y Utiel.",
     "specs": {
       "title": "Especificaciones",
       "year": "Año",
@@ -83,27 +83,27 @@
     "items": {
       "howToBook": {
         "question": "¿Cómo reservo la camper?",
-        "answer": "Selecciona tus fechas en el calendario, completa tus datos y realiza el pago. Recibirás confirmación inmediata por email."
+        "answer": "Selecciona tus fechas en el calendario, completa tus datos y realiza el pago. Recibirás confirmación inmediata por email. Perfecto para alquiler de camper para fin de semana en Cuenca o Albacete."
       },
       "paymentMethods": {
         "question": "¿Qué métodos de pago aceptáis?",
-        "answer": "Aceptamos tarjeta de crédito/débito a través de Stripe y PayPal."
+        "answer": "Aceptamos tarjeta de crédito/débito a través de Stripe y PayPal. Precios de alquiler camper en Albacete y Cuenca transparentes y competitivos."
       },
       "deposit": {
         "question": "¿Hay fianza?",
-        "answer": "Sí, se requiere una fianza de 500€ que se devuelve íntegramente tras comprobar el estado de la camper."
+        "answer": "Sí, se requiere una fianza de 500€ que se devuelve íntegramente tras comprobar el estado de la camper. Ofrecemos alquiler de furgonetas camperizadas en Iniesta con todas las garantías."
       },
       "cancellation": {
         "question": "¿Cuál es la política de cancelación?",
-        "answer": "Cancelación gratuita hasta 14 días antes. Entre 7-14 días, reembolso del 50%. Menos de 7 días, no hay reembolso."
+        "answer": "Cancelación gratuita hasta 14 días antes. Entre 7-14 días, reembolso del 50%. Menos de 7 días, no hay reembolso. Ideal para escapadas de fin de semana en camper en Albacete y Cuenca."
       },
       "included": {
         "question": "¿Qué está incluido?",
-        "answer": "Ropa de cama, toallas, utensilios de cocina, mesa y sillas de camping, kit de limpieza y seguro a todo riesgo."
+        "answer": "Ropa de cama, toallas, utensilios de cocina, mesa y sillas de camping, kit de limpieza y seguro a todo riesgo. Camper pet friendly para viajar con perros en Cuenca y Albacete."
       },
       "pickup": {
         "question": "¿Dónde recojo la camper?",
-        "answer": "La recogida y entrega se realiza en nuestra ubicación. Te enviaremos la dirección exacta tras confirmar la reserva."
+        "answer": "La recogida y entrega se realiza en Iniesta, cerca de Cuenca y Albacete. También cercano a Requena y Utiel. Perfecta ubicación para explorar la Manchuela, Motilla del Palancar y Quintanar del Rey."
       }
     }
   },

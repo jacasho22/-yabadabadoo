@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Eye, EyeOff, ArrowRight, Home } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useLocale } from 'next-intl';
 
 export default function LoginPage() {
@@ -10,15 +11,35 @@ export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const locale = useLocale();
+  const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    setTimeout(() => {
+    setErrorMessage('');
+
+    try {
+      const response = await fetch('/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+      const payload = await response.json();
+
+      if (!response.ok) {
+        throw new Error(payload.error ?? 'No se pudo iniciar sesión.');
+      }
+
+      router.push(`/${locale}/dashboard`);
+    } catch (error) {
+      setErrorMessage(
+        error instanceof Error ? error.message : 'No se pudo iniciar sesión.'
+      );
+    } finally {
       setIsLoading(false);
-      window.location.href = `/${locale}/dashboard`;
-    }, 1000);
+    }
   };
 
   return (
@@ -87,6 +108,12 @@ export default function LoginPage() {
                 </>
               )}
             </button>
+
+            {errorMessage ? (
+              <p className="rounded-2xl bg-red-50 px-4 py-3 text-sm text-red-700">
+                {errorMessage}
+              </p>
+            ) : null}
           </form>
         </div>
 
@@ -97,6 +124,9 @@ export default function LoginPage() {
           >
             ← Volver al sitio web
           </Link>
+        </p>
+        <p className="mt-4 text-center text-xs text-gray-400">
+          Credenciales por defecto: `admin@camperyaba.com` / `camperyaba123`
         </p>
       </div>
     </div>

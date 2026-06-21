@@ -30,7 +30,7 @@ export default function Home() {
   ];
 
   return (
-    <div className="bg-light min-h-screen">
+    <div className="bg-[#fafafa] min-h-screen">
       {/* Hero Section */}
       <section className="relative min-h-screen flex items-center pt-20 overflow-hidden">
         {/* Background Image */}
@@ -42,7 +42,7 @@ export default function Home() {
             className="object-cover"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/10" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
         </div>
 
         <div className="container-main relative z-10 w-full">
@@ -51,20 +51,20 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             className="max-w-3xl mx-auto lg:mx-0 text-center lg:text-left"
           >
-            <p className="text-white/70 text-sm font-medium tracking-[0.2em] uppercase mb-6">
+            <p className="text-white/80 text-sm font-normal tracking-[0.2em] uppercase mb-4">
               {locale === 'es' ? 'Camper en Albacete' : 'Camper in Albacete'}
             </p>
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-white leading-[0.9] mb-8">
+            <h1 className="text-5xl md:text-6xl lg:text-8xl font-extrabold text-white leading-[0.9] mb-6 tracking-[-0.05em]">
               {t('hero.title')}
             </h1>
-            <p className="text-xl md:text-2xl text-white/80 mb-12 max-w-2xl mx-auto lg:mx-0 font-light">
+            <p className="text-xl md:text-2xl text-white/80 mb-10 max-w-2xl mx-auto lg:mx-0 font-light">
               {t('hero.subtitle')}
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
               <Link href={`/${locale}/reservar`} className="btn btn-primary px-8 py-4 group">
                 {t('hero.cta')}
-                <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                <ArrowRight size={17} className="group-hover:translate-x-1 transition-transform" />
               </Link>
               <Link href={`/${locale}/camper`} className="btn btn-secondary px-8 py-4">
                 {locale === 'es' ? 'Conocer la camper' : 'Explore the camper'}
@@ -79,30 +79,43 @@ export default function Home() {
         <div className="container-main w-full">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-24 items-start">
             <motion.div {...fadeIn} className="w-full">
-              <p className="text-sm font-medium tracking-[0.2em] uppercase text-gray-500 mb-4">
-                {locale === 'es' ? 'Nuestra historia' : 'Our story'}
+              <p className="text-sm font-normal tracking-[0.2em] uppercase text-[#6e6e73] mb-4">
+                {locale === 'es' ? 'Tu opción ideal' : 'Our story'}
               </p>
-              <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight mb-8">
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-6 tracking-[-0.04em]">
                 {t('home.intro.title')}
               </h2>
-              <p className="text-lg text-gray-600 leading-relaxed mb-10">
+              <p className="text-lg text-[#1d1d1f] leading-relaxed mb-6">
                 {t('home.intro.description')}
               </p>
+              {locale === 'es' && (
+                <>
+                  <p className="text-lg text-[#1d1d1f] leading-relaxed mb-4">
+                    <strong>¿Buscas alquiler camper cerca de Requena o Utiel?</strong> Estamos en Iniesta, punto estratégico para explorar la Manchuela, Cuenca y Albacete.
+                  </p>
+                  <p className="text-lg text-[#1d1d1f] leading-relaxed mb-4">
+                    <strong>Camper pet friendly</strong> perfecta para viajar con perros, escapadas de fin de semana, y descubrir pueblos como Motilla del Palancar y Quintanar del Rey.
+                  </p>
+                  <p className="text-lg text-[#1d1d1f] leading-relaxed">
+                    <strong>Precios competitivos</strong> de alquiler camper en Albacete y Cuenca, con kilometraje ilimitado y todo incluido.
+                  </p>
+                </>
+              )}
             </motion.div>
             
             <motion.div {...fadeIn} className="space-y-10 lg:space-y-12 w-full">
               <div className="grid grid-cols-2 gap-6 lg:gap-8 w-full">
                 <div className="w-full">
-                  <p className="text-5xl lg:text-6xl font-bold">2024</p>
-                  <p className="text-sm text-gray-500 mt-2 uppercase tracking-widest">{locale === 'es' ? 'Modelo' : 'Model'}</p>
+                  <p className="text-5xl lg:text-6xl font-extrabold text-[#1d1d1f]">2024</p>
+                  <p className="text-sm text-[#6e6e73] mt-2 uppercase tracking-[0.2em]">{locale === 'es' ? 'Modelo' : 'Model'}</p>
                 </div>
                 <div className="w-full">
-                  <p className="text-5xl lg:text-6xl font-bold">2</p>
-                  <p className="text-sm text-gray-500 mt-2 uppercase tracking-widest">{locale === 'es' ? 'Personas' : 'People'}</p>
+                  <p className="text-5xl lg:text-6xl font-extrabold text-[#1d1d1f]">2</p>
+                  <p className="text-sm text-[#6e6e73] mt-2 uppercase tracking-[0.2em]">{locale === 'es' ? 'Personas' : 'People'}</p>
                 </div>
               </div>
               
-              <div className="relative aspect-[4/3] rounded-2xl overflow-hidden w-full">
+              <div className="relative aspect-[4/3] rounded-2xl overflow-hidden w-full shadow-xl">
                 <Image 
                   src="/images/camper-side.jpeg" 
                   alt="Fiat Ducato Camper"
@@ -116,13 +129,13 @@ export default function Home() {
       </section>
 
       {/* Features Grid */}
-      <section className="section-padding bg-light">
+      <section className="section-padding bg-[#fafafa]">
         <div className="container-main w-full">
           <motion.div {...fadeIn} className="mb-12 lg:mb-16 w-full text-center lg:text-left">
-            <p className="text-sm font-medium tracking-[0.2em] uppercase text-gray-500 mb-4">
+            <p className="text-sm font-normal tracking-[0.2em] uppercase text-[#6e6e73] mb-4">
               {locale === 'es' ? 'Equipamiento' : 'Equipment'}
             </p>
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold">
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-[-0.04em]">
               {t('home.features.title')}
             </h2>
           </motion.div>
@@ -137,13 +150,13 @@ export default function Home() {
               <motion.div
                 key={idx}
                 variants={fadeIn}
-                className="bg-white p-6 sm:p-8 lg:p-10 rounded-2xl border border-gray-100 hover:border-gray-200 transition-colors w-full"
+                className="bg-white p-6 sm:p-8 lg:p-10 rounded-2xl border border-[#d2d2d7] hover:border-[#0071e3]/30 transition-colors w-full"
               >
-                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-black flex items-center justify-center mb-5 sm:mb-6">
-                  <item.icon size={20} className="text-white sm:w-6 sm:h-6" />
+                <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl bg-[#f5f5f7] flex items-center justify-center mb-5 sm:mb-6">
+                  <item.icon size={20} className="text-[#0071e3] sm:w-6 sm:h-6" />
                 </div>
-                <h3 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-3">{item.title}</h3>
-                <p className="text-sm sm:text-base text-gray-600 leading-relaxed">{item.desc}</p>
+                <h3 className="text-lg sm:text-xl font-semibold mb-2 sm:mb-3 text-[#1d1d1f]">{item.title}</h3>
+                <p className="text-sm sm:text-base text-[#6e6e73] leading-relaxed">{item.desc}</p>
               </motion.div>
             ))}
           </motion.div>
@@ -151,21 +164,21 @@ export default function Home() {
       </section>
 
       {/* Testimonial Section */}
-      <section className="section-padding bg-black text-white">
+      <section className="section-padding bg-[#1d1d1f] text-white">
         <div className="container-main w-full">
           <motion.div {...fadeIn} className="max-w-4xl mx-auto lg:mx-0 w-full">
-            <p className="text-sm font-medium tracking-[0.2em] uppercase text-gray-500 mb-4">
+            <p className="text-sm font-normal tracking-[0.2em] uppercase text-[#86868b] mb-4">
               {locale === 'es' ? 'Testimonios' : 'Testimonials'}
             </p>
-            <blockquote className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold leading-tight mb-10 lg:mb-12">
+            <blockquote className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight mb-10 lg:mb-12 tracking-[-0.04em]">
               &quot;{locale === 'es' 
                 ? 'No es solo una furgoneta, es un cambio de perspectiva. Despertar viendo el mar por la puerta trasera no tiene precio.'
                 : 'It is not just a van, it is a change of perspective. Waking up seeing the sea through the back door is priceless.'}&quot;
             </blockquote>
             <div className="flex items-center gap-4">
               <div className="text-left">
-                <p className="font-semibold">Ana & Marc</p>
-                <p className="text-sm text-gray-500">{locale === 'es' ? 'Aventureros' : 'Adventurers'}</p>
+                <p className="font-semibold text-white">Ana & Marc</p>
+                <p className="text-sm text-[#86868b]">{locale === 'es' ? 'Aventureros' : 'Adventurers'}</p>
               </div>
             </div>
           </motion.div>
@@ -177,13 +190,13 @@ export default function Home() {
         <div className="container-main w-full">
           <motion.div 
             {...fadeIn}
-            className="bg-white rounded-2xl sm:rounded-3xl p-8 sm:p-12 md:p-16 lg:p-20 border border-gray-100 w-full"
+            className="bg-[#f5f5f7] rounded-2xl sm:rounded-3xl p-8 sm:p-12 md:p-16 lg:p-20 w-full"
           >
             <div className="max-w-3xl mx-auto text-center w-full">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-5 sm:mb-6">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold mb-5 sm:mb-6 tracking-[-0.04em] text-[#1d1d1f]">
                 {locale === 'es' ? '¿Listo para arrancar?' : 'Ready to start?'}
               </h2>
-              <p className="text-base sm:text-lg text-gray-600 mb-10 sm:mb-12">
+              <p className="text-base sm:text-lg text-[#6e6e73] mb-10 sm:mb-12">
                 {locale === 'es' 
                   ? 'Reserva ahora y asegura tus fechas para la aventura de tu vida.'
                   : 'Book now and secure your dates for the adventure of a lifetime.'}

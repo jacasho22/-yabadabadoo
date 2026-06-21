@@ -11,7 +11,7 @@ type PageProps = {
   }>;
 };
 
-export default async function DashboardPage({ params }: PageProps) {
+export default async function DashboardBookingsPage({ params }: PageProps) {
   const { locale } = await params;
 
   if (!(await isAdminAuthenticated())) {
@@ -20,5 +20,5 @@ export default async function DashboardPage({ params }: PageProps) {
 
   const snapshot = await getDashboardSnapshot();
 
-  return <DashboardControlPanel initialData={snapshot} initialSection="overview" />;
+  return <DashboardControlPanel initialData={snapshot} initialSection="bookings" />;
 }

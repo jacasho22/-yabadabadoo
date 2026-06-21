@@ -6,20 +6,19 @@ export const defaultLocale = 'es' as const;
 
 export type Locale = (typeof locales)[number];
 
-export default getRequestConfig(async (params) => {
-  // Support both new (requestLocale) and old (locale) API patterns
-  const requestLocale = (params as any).requestLocale;
-  const localeParam = (params as any).locale;
-  
-  let locale = await (requestLocale || localeParam || defaultLocale);
-  
-  // Final fallback if everything fails
-  if (!locale || !locales.includes(locale as Locale)) {
+export default getRequestConfig(async ({ requestLocale }) => {
+  let locale = await requestLocale;
+
+  if (!locale) {
     locale = defaultLocale;
   }
 
+  if (!locales.includes(locale as Locale)) {
+    notFound();
+  }
+
   return {
-    locale: locale as Locale,
-    messages: (await import(`./messages/${locale}.json`)).default
+    locale,
+    messages: (await import(`./messages/${locale}.json`)).default,
   };
 });

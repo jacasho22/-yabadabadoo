@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -35,7 +36,9 @@ model Booking {
   paymentId     String?
   customer      Customer      @relation(fields: [customerId], references: [id])
   customerId    String
+  source        BookingSource @default(PUBLIC)
   notes         String?       @db.Text
+  transactions  PaymentTransaction[]
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
 }
@@ -48,6 +51,7 @@ model Customer {
   dni       String?
   license   String?
   bookings  Booking[]
+  transactions PaymentTransaction[]
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 }
@@ -62,6 +66,24 @@ model BlockedDate {
   @@unique([camperId, date])
 }
 
+model PaymentTransaction {
+  id            String            @id @default(cuid())
+  booking       Booking           @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  bookingId     String
+  customer      Customer          @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  customerId    String
+  type          TransactionType
+  status        TransactionStatus @default(SUCCEEDED)
+  paymentMethod PaymentMethod
+  amount        Int
+  reference     String?
+  description   String?           @db.Text
+  createdAt     DateTime          @default(now())
+
+  @@index([bookingId, createdAt])
+  @@index([customerId, createdAt])
+}
+
 enum BookingStatus {
   PENDING
   CONFIRMED
@@ -72,4 +94,23 @@ enum BookingStatus {
 enum PaymentMethod {
   STRIPE
   PAYPAL
+  BANK_TRANSFER
+  CASH
+  MANUAL
+}
+
+enum BookingSource {
+  PUBLIC
+  ADMIN
+}
+
+enum TransactionType {
+  CHARGE
+  REFUND
+}
+
+enum TransactionStatus {
+  PENDING
+  SUCCEEDED
+  FAILED
 }
