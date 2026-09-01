@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { ensureAdminAccess } from '@/lib/admin-auth';
+import { checkDbAvailability } from '@/lib/dashboard-data';
+import { updateMockCamperPricing } from '@/lib/mock-db';
 
 type RouteContext = {
   params: Promise<{
@@ -33,6 +35,19 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
         { error: 'Los precios indicados no son válidos.' },
         { status: 400 }
       );
+    }
+
+    const useMockWrite = camperId.startsWith('mock-') || !(await checkDbAvailability());
+
+    if (useMockWrite) {
+      const camper = updateMockCamperPricing({
+        camperId,
+        pricePerDay,
+        pricePerWeek,
+        pricePerMonth,
+      });
+
+      return NextResponse.json({ success: true, camper });
     }
 
     const camper = await prisma.camper.update({

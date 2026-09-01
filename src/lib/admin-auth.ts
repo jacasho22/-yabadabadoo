@@ -4,6 +4,7 @@ import crypto from 'crypto';
 
 export const ADMIN_COOKIE_NAME = 'yaba_admin_session';
 const SESSION_DURATION_MS = 12 * 60 * 60 * 1000; // 12 hours
+const revokedTokens = new Map<string, number>();
 
 // ---------------------------------------------------------------------------
 // Secret key — falls back to a hard-coded dev key so the app works without
@@ -52,6 +53,14 @@ function verify(token: string): Record<string, unknown> | null {
   }
 }
 
+function cleanupRevokedTokens(now: number) {
+  for (const [token, expiresAt] of revokedTokens.entries()) {
+    if (expiresAt <= now) {
+      revokedTokens.delete(token);
+    }
+  }
+}
+
 // ---------------------------------------------------------------------------
 // Credentials
 // ---------------------------------------------------------------------------
@@ -94,11 +103,15 @@ export async function isAdminAuthenticated(): Promise<boolean> {
     const token = cookieStore.get(ADMIN_COOKIE_NAME)?.value;
     if (!token) return false;
 
+    const now = Date.now();
+    cleanupRevokedTokens(now);
+    if (revokedTokens.has(token)) return false;
+
     const payload = verify(token);
     if (!payload) return false;
 
     const expiresAt = payload.expiresAt as number;
-    if (!expiresAt || Date.now() > expiresAt) return false;
+    if (!expiresAt || now > expiresAt) return false;
 
     return true;
   } catch {
@@ -115,10 +128,15 @@ export async function createSession(email: string): Promise<string> {
   });
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export async function destroySession(_sessionId: string): Promise<void> {
-  // Stateless tokens are destroyed by deleting the cookie on the client.
-  // Nothing to do server-side.
+export async function destroySession(sessionId: string): Promise<void> {
+  const payload = verify(sessionId);
+  const expiresAt =
+    typeof payload?.expiresAt === 'number'
+      ? payload.expiresAt
+      : Date.now() + SESSION_DURATION_MS;
+
+  cleanupRevokedTokens(Date.now());
+  revokedTokens.set(sessionId, expiresAt);
 }
 
 // ---------------------------------------------------------------------------

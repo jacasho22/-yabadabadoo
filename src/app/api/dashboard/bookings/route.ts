@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { ensureAdminAccess } from '@/lib/admin-auth';
-import { buildBookingDraft, getBookingAvailabilityMap } from '@/lib/dashboard-data';
+import { buildBookingDraft, checkDbAvailability, getBookingAvailabilityMap } from '@/lib/dashboard-data';
+import { createMockBooking } from '@/lib/mock-db';
 
 export async function POST(request: NextRequest) {
   const unauthorizedResponse = await ensureAdminAccess();
@@ -51,6 +52,42 @@ export async function POST(request: NextRequest) {
         { error: 'Las fechas ya no están disponibles.' },
         { status: 409 }
       );
+    }
+
+    const useMockWrite = camperId.startsWith('mock-') || !(await checkDbAvailability());
+
+    if (useMockWrite) {
+      const booking = createMockBooking({
+        camperId,
+        startDate,
+        endDate,
+        paymentMethod:
+          paymentMethod === 'STRIPE' ||
+          paymentMethod === 'PAYPAL' ||
+          paymentMethod === 'BANK_TRANSFER' ||
+          paymentMethod === 'CASH' ||
+          paymentMethod === 'MANUAL'
+            ? paymentMethod
+            : 'BANK_TRANSFER',
+        status:
+          status === 'PENDING' ||
+          status === 'CONFIRMED' ||
+          status === 'CANCELLED' ||
+          status === 'COMPLETED'
+            ? status
+            : 'CONFIRMED',
+        notes,
+        customerData: {
+          name: String(customerData.name).trim(),
+          email: String(customerData.email).trim(),
+          phone: String(customerData.phone).trim(),
+          dni: customerData.dni ? String(customerData.dni).trim() : undefined,
+          license: customerData.license ? String(customerData.license).trim() : undefined,
+        },
+        source: 'ADMIN',
+      });
+
+      return NextResponse.json({ success: true, booking });
     }
 
     const customer = await prisma.customer.upsert({

@@ -5,7 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useLocale } from 'next-intl';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowRight, ChevronRight, Calendar, Info, ShieldCheck, Zap, Sun, Compass } from 'lucide-react';
+import { ChevronRight, Calendar, Info, ShieldCheck, Zap, Sun, Compass } from 'lucide-react';
 
 export default function AppleNexusExperience() {
   const locale = useLocale();
@@ -243,7 +243,9 @@ export default function AppleNexusExperience() {
                 ].map((item) => (
                   <button
                     key={item.id}
-                    onClick={() => setActiveFeatureTab(item.id as any)}
+                    onClick={() =>
+                      setActiveFeatureTab(item.id as 'solar' | 'insulation' | 'walnut')
+                    }
                     className={`text-left p-8 rounded-2xl border transition-all ${
                       activeFeatureTab === item.id 
                         ? 'border-white bg-apple-surface shadow-md' 

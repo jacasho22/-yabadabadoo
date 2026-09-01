@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { ensureAdminAccess } from '@/lib/admin-auth';
+import { checkDbAvailability } from '@/lib/dashboard-data';
+import { updateMockBooking } from '@/lib/mock-db';
 
 type RouteContext = {
   params: Promise<{
@@ -51,6 +53,13 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
       ) {
         data.paymentMethod = paymentMethod;
       }
+    }
+
+    const useMockWrite = bookingId.startsWith('mock-') || !(await checkDbAvailability());
+
+    if (useMockWrite) {
+      const booking = updateMockBooking(bookingId, data);
+      return NextResponse.json({ success: true, booking });
     }
 
     const booking = await prisma.booking.update({

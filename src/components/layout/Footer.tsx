@@ -1,15 +1,20 @@
 'use client';
 
 import Link from 'next/link';
-import Image from 'next/image';
 import { useTranslations, useLocale } from 'next-intl';
 import { Instagram, Mail, Phone, MapPin } from 'lucide-react';
 
 export default function Footer() {
   const t = useTranslations('footer');
   const locale = useLocale();
-  
+
   const currentYear = new Date().getFullYear();
+
+  const exploreLinks = [
+    { href: `/${locale}/camper`, label: locale === 'es' ? 'La Camper' : 'The Camper' },
+    { href: `/${locale}/rutas`, label: locale === 'es' ? 'Rutas' : 'Routes' },
+    { href: `/${locale}/faq`, label: 'FAQ' },
+  ];
 
   const legalLinks = [
     { href: `/${locale}/legal/aviso-legal`, label: t('legal') },
@@ -19,88 +24,60 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="bg-[#f5f5f7] text-[#1d1d1f] pt-20 pb-10">
-      <div className="container-main">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 mb-16">
-          {/* Brand */}
-          <div className="lg:col-span-4">
-            <div className="relative w-36 h-10 mb-6">
-              <Image 
-                src="/images/logo.jpeg" 
-                alt="Yabadabadoo Campers" 
-                fill 
-                className="object-contain object-left"
-              />
-            </div>
-            <p className="text-[#6e6e73] text-sm leading-relaxed mb-6 max-w-sm">
-              {locale === 'es' 
+    <footer style={{ backgroundColor: 'var(--color-paper-2)', color: 'var(--color-ink)' }}>
+      <div className="container-main pt-16 pb-8">
+        <div className="grid gap-10 lg:grid-cols-[1.3fr,1fr] lg:items-start">
+          <div>
+            <p
+              className="text-3xl md:text-4xl mb-3"
+              style={{ fontFamily: 'var(--font-display)', fontWeight: 600, letterSpacing: '-0.01em' }}
+            >
+              Yabadabadoo Campers
+            </p>
+            <p className="text-sm max-w-md leading-relaxed" style={{ color: 'var(--color-ink-2)', fontFamily: 'var(--font-body)' }}>
+              {locale === 'es'
                 ? 'Alquiler de camper con alma para aventureros que buscan libertad real.'
                 : 'Camper rental with soul for adventurers seeking real freedom.'}
             </p>
-            <div className="flex gap-4">
-              <a href="https://instagram.com" target="_blank" rel="noopener" className="text-[#6e6e73] hover:text-[#0071e3] transition-colors">
-                <Instagram size={18} />
-              </a>
-              <a href="mailto:hola@yabadabadookampers.com" className="text-[#6e6e73] hover:text-[#0071e3] transition-colors">
-                <Mail size={18} />
-              </a>
-            </div>
           </div>
 
-          {/* Navigation */}
-          <div className="lg:col-span-8 grid grid-cols-2 md:grid-cols-3 gap-12">
-            <div>
-              <h4 className="text-[#1d1d1f] font-semibold mb-4 text-[12px] tracking-[0.05em]">Explore</h4>
-              <nav className="flex flex-col gap-2.5">
-                <Link href={`/${locale}/camper`} className="text-[#6e6e73] hover:text-[#0071e3] text-[12px] transition-colors">
-                  {locale === 'es' ? 'La Camper' : 'The Camper'}
-                </Link>
-                <Link href={`/${locale}/rutas`} className="text-[#6e6e73] hover:text-[#0071e3] text-[12px] transition-colors">
-                  {locale === 'es' ? 'Rutas Recomendadas' : 'Recommended Routes'}
-                </Link>
-                <Link href={`/${locale}/faq`} className="text-[#6e6e73] hover:text-[#0071e3] text-[12px] transition-colors">
-                  {locale === 'es' ? 'Preguntas Frecuentes' : 'FAQ'}
-                </Link>
-              </nav>
-            </div>
+          <nav className="flex flex-wrap gap-x-6 gap-y-2 lg:justify-end text-sm" style={{ fontFamily: 'var(--font-body)' }}>
+            {exploreLinks.map((link) => (
+              <Link key={link.href} href={link.href} style={{ color: 'var(--color-ink)' }}>
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+        </div>
 
-            <div>
-              <h4 className="text-[#1d1d1f] font-semibold mb-4 text-[12px] tracking-[0.05em]">Legal</h4>
-              <nav className="flex flex-col gap-2.5">
-                {legalLinks.map((link) => (
-                  <Link 
-                    key={link.href} 
-                    href={link.href}
-                    className="text-[#6e6e73] hover:text-[#0071e3] text-[12px] transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-              </nav>
-            </div>
+        <div
+          className="mt-12 pt-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4 text-xs"
+          style={{ borderTop: '1px solid var(--color-rule)', color: 'var(--color-ink-2)', fontFamily: 'var(--font-body)' }}
+        >
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+            <span className="inline-flex items-center gap-1.5"><MapPin size={13} /> Iniesta, Cuenca</span>
+            <span className="inline-flex items-center gap-1.5"><Phone size={13} /> +34 645 613 670</span>
+            <a href="mailto:hola@yabadabadoocampers.com" className="inline-flex items-center gap-1.5">
+              <Mail size={13} /> hola@yabadabadoocampers.com
+            </a>
+            <a href="https://instagram.com" target="_blank" rel="noopener" className="inline-flex items-center gap-1.5">
+              <Instagram size={13} /> Instagram
+            </a>
+          </div>
 
-            <div className="col-span-2 md:col-span-1">
-              <h4 className="text-[#1d1d1f] font-semibold mb-4 text-[12px] tracking-[0.05em]">Contact</h4>
-              <div className="flex flex-col gap-2.5">
-                <div className="flex items-center gap-2 text-[#6e6e73] text-[12px]">
-                  <MapPin size={14} />
-                  <span>Iniesta, Cuenca</span>
-                </div>
-                <div className="flex items-center gap-2 text-[#6e6e73] text-[12px]">
-                  <Phone size={14} />
-                  <span>+34 645 613 670</span>
-                </div>
-              </div>
-            </div>
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+            {legalLinks.map((link, i) => (
+              <span key={link.href} className="inline-flex items-center gap-4">
+                <Link href={link.href}>{link.label}</Link>
+                {i < legalLinks.length - 1 && <span aria-hidden>&middot;</span>}
+              </span>
+            ))}
           </div>
         </div>
 
-        {/* Bottom */}
-        <div className="pt-6 border-t border-[#d2d2d7] flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-[#6e6e73] text-[11px]">
-            © {currentYear} Yabadabadoo Campers. {t('rights')}.
-          </p>
-        </div>
+        <p className="mt-4 text-xs" style={{ color: 'var(--color-ink-2)', fontFamily: 'var(--font-body)' }}>
+          &copy; {currentYear} Yabadabadoo Campers. {t('rights')}.
+        </p>
       </div>
     </footer>
   );

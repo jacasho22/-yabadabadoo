@@ -246,8 +246,8 @@ export function createMockBooking(data: {
   camperId: string;
   startDate: Date;
   endDate: Date;
-  paymentMethod: Booking['paymentMethod'];
-  status: Booking['status'];
+  paymentMethod: MockBooking['paymentMethod'];
+  status: MockBooking['status'];
   notes: string | null;
   customerData: {
     name: string;
@@ -318,7 +318,7 @@ export function updateMockBooking(
   data: {
     status?: 'PENDING' | 'CONFIRMED' | 'CANCELLED' | 'COMPLETED';
     notes?: string | null;
-    paymentMethod?: Booking['paymentMethod'];
+    paymentMethod?: MockBooking['paymentMethod'];
   }
 ) {
   const booking = mockDb.bookings.find((b) => b.id === bookingId);
@@ -347,7 +347,7 @@ export function updateMockBooking(
 export function createMockTransaction(data: {
   bookingId: string;
   type: 'CHARGE' | 'REFUND';
-  paymentMethod: Booking['paymentMethod'];
+  paymentMethod: MockBooking['paymentMethod'];
   amount: number;
   description: string | null;
   reference: string | null;
@@ -372,4 +372,23 @@ export function createMockTransaction(data: {
 
   mockDb.transactions.unshift(transaction);
   return transaction;
+}
+
+export function updateMockCamperPricing(data: {
+  camperId: string;
+  pricePerDay: number;
+  pricePerWeek: number;
+  pricePerMonth: number;
+}) {
+  const camper = mockDb.campers.find((item) => item.id === data.camperId);
+  if (!camper) {
+    throw new Error('Camper no encontrada');
+  }
+
+  camper.pricePerDay = Math.round(data.pricePerDay);
+  camper.pricePerWeek = Math.round(data.pricePerWeek);
+  camper.pricePerMonth = Math.round(data.pricePerMonth);
+  camper.updatedAt = new Date();
+
+  return camper;
 }

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
-import { buildBookingDraft, getBookingAvailabilityMap } from '@/lib/dashboard-data';
+import { buildBookingDraft, checkDbAvailability, getBookingAvailabilityMap } from '@/lib/dashboard-data';
+import { createMockBooking } from '@/lib/mock-db';
 
 export const dynamic = 'force-dynamic';
 
@@ -30,44 +31,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check if it's a mock camper (id starts with 'mock-')
-    if (requestedCamperId && requestedCamperId.startsWith('mock-')) {
-      // Mock booking creation - calculate price using the mock camper
-      const mockCamper = {
-        id: requestedCamperId,
-        pricePerDay: 14000,
-        pricePerWeek: 98000,
-        pricePerMonth: 420000,
-      };
-      
-      // Calculate the price (we can import calculateBookingPrice or write a simple one)
-      const nights = Math.max(1, Math.ceil((bookingEndDate.getTime() - bookingStartDate.getTime()) / (1000 * 60 * 60 * 24)));
-      let totalPrice = 0;
-      
-      if (nights >= 30) {
-        totalPrice = Math.ceil(nights / 30) * mockCamper.pricePerMonth;
-      } else if (nights >= 7) {
-        totalPrice = Math.ceil(nights / 7) * mockCamper.pricePerWeek;
-      } else {
-        totalPrice = nights * mockCamper.pricePerDay;
-      }
-      
-      return NextResponse.json({
-        success: true,
-        booking: {
-          id: 'mock-booking-' + Date.now(),
-          startDate: bookingStartDate,
-          endDate: bookingEndDate,
-          totalPrice: totalPrice,
-          status: 'PENDING',
-          camper: {
-            id: requestedCamperId,
-            name: 'Camper Yaba Adventure',
-          },
-        },
-      });
-    }
-
     const bookingDraft = await buildBookingDraft(
       bookingStartDate,
       bookingEndDate,
@@ -94,6 +57,43 @@ export async function POST(request: NextRequest) {
         { error: 'Dates are no longer available' },
         { status: 409 }
       );
+    }
+
+    const useMockWrite =
+      bookingDraft.camper.id.startsWith('mock-') || !(await checkDbAvailability());
+
+    if (useMockWrite) {
+      const booking = createMockBooking({
+        camperId: bookingDraft.camper.id,
+        startDate: bookingStartDate,
+        endDate: bookingEndDate,
+        paymentMethod: 'MANUAL',
+        status: 'PENDING',
+        notes: null,
+        customerData: {
+          name: String(customerData.name).trim(),
+          email: String(customerData.email).trim(),
+          phone: String(customerData.phone).trim(),
+          dni: customerData.dni ? String(customerData.dni).trim() : undefined,
+          license: customerData.license ? String(customerData.license).trim() : undefined,
+        },
+        source: 'PUBLIC',
+      });
+
+      return NextResponse.json({
+        success: true,
+        booking: {
+          id: booking.id,
+          startDate: booking.startDate,
+          endDate: booking.endDate,
+          totalPrice: booking.totalPrice,
+          status: booking.status,
+          camper: {
+            id: booking.camper.id,
+            name: booking.camper.name,
+          },
+        },
+      });
     }
 
     const normalizedEmail = String(customerData.email).trim();
@@ -149,21 +149,10 @@ export async function POST(request: NextRequest) {
 
   } catch (error) {
     console.error('Booking creation error:', error);
-    // Return success even if database fails (for demo purposes)
-    return NextResponse.json({
-      success: true,
-      booking: {
-        id: 'mock-booking-' + Date.now(),
-        startDate: new Date(),
-        endDate: new Date(),
-        totalPrice: 0,
-        status: 'PENDING',
-        camper: {
-          id: 'mock-camper-1',
-          name: 'Camper Yaba Adventure',
-        },
-      },
-    });
+    return NextResponse.json(
+      { error: 'No se pudo crear la reserva.' },
+      { status: 500 }
+    );
   }
 }
 

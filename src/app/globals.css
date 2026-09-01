@@ -1,35 +1,76 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+/* Hallmark · genre: editorial · theme: Terracota mediterráneo (rev. 2 of Rumbos-A)
+ * macrostructure family: Photographic + framed/deckle-edge hero photo ·
+ * Conversational FAQ · Long Document (legal) · reservar: typography-only
+ * signature: paper-grain texture + framed/deckle-edge hero photo
+ * design-system: design.md · designed-as-app
+ */
 @import "tailwindcss";
 
+/* Maps legacy `bg-primary` / `text-dark` / `bg-light` Tailwind utility
+ * classes (used across reservar and other not-yet-touched markup, with no
+ * tailwind.config.* to resolve them) onto the design.md tokens below —
+ * lets those pages inherit the new palette without editing their JSX. */
+@theme inline {
+  --color-primary: var(--color-ink);
+  --color-primary-light: var(--color-ink-2);
+  --color-primary-dark: var(--color-ink);
+  --color-secondary: var(--color-paper);
+  --color-dark: var(--color-ink);
+  --color-light: var(--color-paper);
+}
+
 :root {
-  --background: #fafafa;
-  --foreground: #0a0a0a;
-  
-  --color-primary: #0a0a0a;
-  --color-primary-light: #1a1a1a;
-  --color-primary-dark: #000000;
-  --color-secondary: #ffffff;
-  --color-accent: #666666;
-  --color-dark: #000000;
-  --color-light: #fafafa;
-  
-  --font-display: "Inter", sans-serif;
-  --font-body: "Inter", sans-serif;
-  
-  --spacing-section: clamp(6rem, 12vw, 14rem);
+  --color-paper: oklch(96% 0.02 85);
+  --color-paper-2: oklch(91% 0.025 75);
+  --color-ink: oklch(24% 0.02 50);
+  --color-ink-2: oklch(46% 0.02 50);
+  --color-rule: oklch(85% 0.02 70);
+  --color-accent: oklch(58% 0.15 35);
+  --color-accent-ink: oklch(97% 0.01 90);
+  --color-focus: oklch(58% 0.15 35);
+
+  /* legacy aliases kept during migration — components read these directly */
+  --background: var(--color-paper);
+  --foreground: var(--color-ink);
+  --color-primary: var(--color-ink);
+  --color-primary-light: var(--color-ink-2);
+  --color-primary-dark: var(--color-ink);
+  --color-secondary: var(--color-paper);
+  --color-dark: var(--color-ink);
+  --color-light: var(--color-paper);
+
+  --font-display: var(--font-fraunces), "Fraunces", serif;
+  --font-body: var(--font-public-sans), "Public Sans", sans-serif;
+
+  --space-3xs: 0.25rem;
+  --space-2xs: 0.5rem;
+  --space-xs: 0.75rem;
+  --space-sm: 1rem;
+  --space-md: 1.5rem;
+  --space-lg: 2rem;
+  --space-xl: 3rem;
+  --space-2xl: 4.5rem;
+  --space-3xl: 7rem;
+
+  --text-display: clamp(2.25rem, 3.4vw + 1rem, 3.75rem);
+
+  --spacing-section: var(--space-3xl);
   --spacing-container: clamp(1.5rem, 6vw, 3rem);
-  
-  --radius-sm: 0.5rem;
-  --radius-md: 1rem;
-  --radius-lg: 1.5rem;
-  --radius-xl: 2rem;
-  
+
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-pill: 999px;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-short: 220ms;
+
   color-scheme: light;
 }
 
 body {
-  background-color: var(--background);
-  color: var(--foreground);
+  background-color: var(--color-paper);
+  color: var(--color-ink);
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
@@ -37,13 +78,20 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-display);
-  font-weight: 800;
-  letter-spacing: -0.04em;
+  font-weight: 600;
+  font-style: normal;
+  letter-spacing: -0.01em;
 }
 
 h1 {
-  font-weight: 900;
-  letter-spacing: -0.05em;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-focus);
+  outline-offset: 2px;
+  transition: none;
 }
 
 .container-main {
@@ -57,75 +105,176 @@ h1 {
   padding: var(--spacing-section) 0;
 }
 
-/* Glassmorphism */
+.eyebrow {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin-bottom: var(--space-xs);
+}
+
+/* Glassmorphism (kept for header frost-on-scroll) */
 .glass {
-  background: rgba(255, 255, 255, 0.8);
+  background: oklch(96% 0.02 85 / 0.82);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  border: 1px solid oklch(24% 0.02 50 / 0.06);
 }
 
-.dark .glass {
-  background: rgba(0, 0, 0, 0.8);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-/* Premium Buttons */
+/* CTA voice — ink-fill, radius-sm. No pills (that was the old Apple-blue tell). */
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
   font-family: var(--font-body);
-  font-weight: 400;
-  padding: 0.85rem 2.25rem;
-  border-radius: 9999px;
-  transition: all 0.2s ease-in-out;
+  font-weight: 600;
+  padding: 0.85rem 1.75rem;
+  border-radius: var(--radius-sm);
+  transition: transform var(--dur-short) var(--ease-out), background-color var(--dur-short) var(--ease-out), box-shadow var(--dur-short) var(--ease-out);
   cursor: pointer;
   font-size: 0.95rem;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.005em;
 }
 
 .btn-primary {
-  background-color: #0071e3;
-  color: white;
+  background-color: var(--color-ink);
+  color: var(--color-paper);
   border: none;
+  box-shadow: 0 1px 2px oklch(24% 0.02 50 / 0.15);
 }
 
 .btn-primary:hover {
-  background-color: #0077ed;
-  transform: translateY(-1px);
+  background-color: oklch(30% 0.025 50);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px -4px oklch(24% 0.02 50 / 0.35);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px oklch(24% 0.02 50 / 0.2);
+  transition-duration: 80ms;
 }
 
 .btn-secondary {
-  background-color: transparent;
-  color: #0071e3;
-  border: 1px solid rgba(0, 113, 227, 0.3);
+  background: none;
+  border: none;
+  padding: 0.85rem 0;
+  color: var(--color-ink);
+  text-decoration: underline;
+  text-decoration-color: var(--color-accent);
+  text-underline-offset: 4px;
+  border-radius: 0;
 }
 
 .btn-secondary:hover {
-  background-color: rgba(0, 113, 227, 0.05);
-  transform: translateY(-1px);
+  text-decoration-thickness: 2px;
 }
 
-/* Text Gradients */
+/* Sliding-underline link — reusable premium link treatment */
+.link-underline {
+  position: relative;
+  text-decoration: none;
+  padding-bottom: 2px;
+}
+
+.link-underline::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 1.5px;
+  width: 100%;
+  background-color: currentColor;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 320ms var(--ease-out);
+}
+
+.link-underline:hover::after,
+.link-underline:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* Interactive row (equipment lists, spec sheets, accordions) */
+.row-interactive {
+  transition: background-color 220ms var(--ease-out), padding-inline 220ms var(--ease-out);
+}
+
+.row-interactive:hover {
+  background-color: oklch(24% 0.02 50 / 0.035);
+  padding-inline: 0.6rem;
+}
+
+/* Signature: paper grain, fixed full-viewport, behind all content */
+.paper-grain {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.05;
+  mix-blend-mode: multiply;
+  z-index: 1;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* Signature: framed / deckle-edge hero photo — one per page, not for galleries */
+.photo-frame {
+  background: oklch(99% 0.005 85);
+  padding: 14px 14px 34px;
+  transform: rotate(2deg);
+  box-shadow: 0 18px 34px -14px oklch(24% 0.02 50 / 0.35), 0 2px 6px oklch(24% 0.02 50 / 0.12);
+}
+
+.photo-deckle {
+  overflow: hidden;
+  position: relative;
+  clip-path: polygon(
+    0% 0%, 100% 0%, 100% 96%, 97% 98%, 93% 96%, 89% 99%, 85% 96%, 81% 98.5%,
+    77% 96%, 73% 99%, 69% 96.5%, 65% 98%, 61% 96%, 57% 99%, 53% 96.5%,
+    49% 98%, 45% 96%, 41% 99%, 37% 96.5%, 33% 98%, 29% 96%, 25% 99%,
+    21% 96.5%, 17% 98%, 13% 96%, 9% 99%, 5% 96.5%, 0% 98%
+  );
+}
+
+.photo-caption {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 0.8125rem;
+  color: var(--color-ink-2);
+  text-align: center;
+  margin: 14px 0 0;
+  letter-spacing: 0.01em;
+}
+
+/* Gallery / photo hover zoom */
+.photo-zoom {
+  overflow: hidden;
+}
+
+.photo-zoom img {
+  transition: transform 700ms var(--ease-out);
+}
+
+.photo-zoom:hover img {
+  transform: scale(1.045);
+}
+
+/* Text treatment */
 .text-gradient {
-  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--color-ink);
 }
 
 .text-gradient-gold {
-  background: linear-gradient(135deg, #f4a259 0%, #ff8e3c 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--color-accent);
 }
 
 /* Shadows */
 .shadow-premium {
-  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 20px 40px -10px oklch(24% 0.02 50 / 0.12);
 }
 
 /* Custom Scrollbar */
@@ -134,49 +283,58 @@ h1 {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--background);
+  background: var(--color-paper);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #d1d5db;
+  background: var(--color-rule);
   border-radius: 10px;
-  border: 2px solid var(--background);
+  border: 2px solid var(--color-paper);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #9ca3af;
+  background: var(--color-ink-2);
 }
 
-/* React Day Picker Visibility Fix */
+/* React Day Picker */
 .rdp {
   --rdp-cell-size: 45px;
-  --rdp-accent-color: var(--color-primary);
-  --rdp-background-color: var(--color-primary-light);
+  --rdp-accent-color: var(--color-ink);
+  --rdp-background-color: var(--color-paper-2);
   margin: 0;
 }
 
 .rdp-day {
-  color: var(--color-dark) !important;
+  color: var(--color-ink) !important;
   font-weight: 600;
 }
 
 .rdp-day_selected, .rdp-day_selected:hover {
-  color: white !important;
+  color: var(--color-paper) !important;
 }
 
 .rdp-day_disabled {
-  color: #d1d5db !important;
-  opacity: 0.5;
+  color: var(--color-rule) !important;
+  opacity: 0.6;
 }
 
 .rdp-button:hover:not([disabled]):not(.rdp-day_selected) {
-  background-color: rgba(10, 10, 10, 0.1);
+  background-color: oklch(24% 0.02 50 / 0.08);
 }
 
 .rdp-head_cell {
-  color: var(--color-primary);
+  color: var(--color-ink);
   font-weight: 700;
   text-transform: uppercase;
   font-size: 0.75rem;
   letter-spacing: 0.05em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

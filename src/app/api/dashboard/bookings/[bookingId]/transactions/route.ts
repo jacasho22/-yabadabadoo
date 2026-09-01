@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 import { ensureAdminAccess } from '@/lib/admin-auth';
-import { calculateBookingTotals } from '@/lib/dashboard-data';
+import { calculateBookingTotals, checkDbAvailability } from '@/lib/dashboard-data';
+import { createMockTransaction, getMockBookingRecords } from '@/lib/mock-db';
 
 type RouteContext = {
   params: Promise<{
@@ -29,6 +30,46 @@ export async function POST(request: NextRequest, context: RouteContext) {
         { error: 'El movimiento financiero no es válido.' },
         { status: 400 }
       );
+    }
+
+    const useMockWrite = bookingId.startsWith('mock-') || !(await checkDbAvailability());
+
+    if (useMockWrite) {
+      const booking = getMockBookingRecords().find((record) => record.id === bookingId);
+
+      if (!booking) {
+        return NextResponse.json(
+          { error: 'Reserva no encontrada.' },
+          { status: 404 }
+        );
+      }
+
+      const totals = calculateBookingTotals(booking);
+
+      if (type === 'REFUND' && amount > totals.netPaid) {
+        return NextResponse.json(
+          { error: 'No puedes devolver más de lo cobrado neto.' },
+          { status: 400 }
+        );
+      }
+
+      const transaction = createMockTransaction({
+        bookingId,
+        type,
+        paymentMethod:
+          paymentMethod === 'STRIPE' ||
+          paymentMethod === 'PAYPAL' ||
+          paymentMethod === 'BANK_TRANSFER' ||
+          paymentMethod === 'CASH' ||
+          paymentMethod === 'MANUAL'
+            ? paymentMethod
+            : 'MANUAL',
+        amount: Math.round(amount),
+        description,
+        reference,
+      });
+
+      return NextResponse.json({ success: true, transaction });
     }
 
     const booking = await prisma.booking.findUnique({

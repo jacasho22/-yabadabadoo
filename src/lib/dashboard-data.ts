@@ -5,6 +5,9 @@ import * as mockDb from './mock-db';
 let isDbOnline: boolean | null = null;
 let lastCheckTime = 0;
 
+type BookingRecord = ReturnType<typeof mockDb.getMockBookingRecords>[number];
+type TransactionRecord = ReturnType<typeof mockDb.getMockTransactionRecords>[number];
+
 export async function checkDbAvailability() {
   const now = Date.now();
   if (isDbOnline !== null && now - lastCheckTime < 10000) {
@@ -16,7 +19,7 @@ export async function checkDbAvailability() {
       new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 1000))
     ]);
     isDbOnline = true;
-  } catch (e) {
+  } catch {
     isDbOnline = false;
   }
   lastCheckTime = now;
@@ -54,7 +57,7 @@ export async function getPrimaryCamper() {
       where: { active: true },
       orderBy: { createdAt: 'asc' },
     });
-  } catch (error) {
+  } catch {
     return mockDb.getMockCampers()[0] || null;
   }
 }
@@ -68,17 +71,17 @@ export async function getCampers() {
       where: { active: true },
       orderBy: { createdAt: 'asc' },
     });
-  } catch (error) {
+  } catch {
     return mockDb.getMockCampers();
   }
 }
 
-async function getBookingRecords() {
+async function getBookingRecords(): Promise<BookingRecord[]> {
   if (!(await checkDbAvailability())) {
-    return mockDb.getMockBookingRecords() as any;
+    return mockDb.getMockBookingRecords();
   }
   try {
-    return await prisma.booking.findMany({
+    return (await prisma.booking.findMany({
       include: {
         camper: {
           select: {
@@ -105,18 +108,18 @@ async function getBookingRecords() {
         },
       },
       orderBy: { startDate: 'desc' },
-    });
-  } catch (error) {
-    return mockDb.getMockBookingRecords() as any;
+    })) as BookingRecord[];
+  } catch {
+    return mockDb.getMockBookingRecords();
   }
 }
 
-async function getTransactionRecords() {
+async function getTransactionRecords(): Promise<TransactionRecord[]> {
   if (!(await checkDbAvailability())) {
-    return mockDb.getMockTransactionRecords() as any;
+    return mockDb.getMockTransactionRecords();
   }
   try {
-    return await prisma.paymentTransaction.findMany({
+    return (await prisma.paymentTransaction.findMany({
       include: {
         booking: {
           select: {
@@ -136,14 +139,11 @@ async function getTransactionRecords() {
         },
       },
       orderBy: { createdAt: 'desc' },
-    });
-  } catch (error) {
-    return mockDb.getMockTransactionRecords() as any;
+    })) as TransactionRecord[];
+  } catch {
+    return mockDb.getMockTransactionRecords();
   }
 }
-
-type BookingRecord = Awaited<ReturnType<typeof getBookingRecords>>[number];
-type TransactionRecord = Awaited<ReturnType<typeof getTransactionRecords>>[number];
 
 export function calculateBookingTotals(record: {
   totalPrice: number;
@@ -196,7 +196,7 @@ function serializeBooking(record: BookingRecord) {
     customer: record.customer,
     camper: record.camper,
     financials,
-    transactions: record.transactions.map((transaction: any) => ({
+    transactions: record.transactions.map((transaction) => ({
       id: transaction.id,
       type: transaction.type,
       status: transaction.status,
@@ -335,17 +335,17 @@ export async function getDashboardSnapshot() {
       transactions: transactions.map(serializeTransaction),
       accounts: buildAccounts(bookings),
     };
-  } catch (error) {
+  } catch {
     const campers = mockDb.getMockCampers();
     const bookings = mockDb.getMockBookingRecords();
     const transactions = mockDb.getMockTransactionRecords();
 
     return {
       campers,
-      overview: buildOverview(bookings as any, transactions as any),
-      bookings: (bookings as any).map(serializeBooking),
-      transactions: (transactions as any).map(serializeTransaction),
-      accounts: buildAccounts(bookings as any),
+      overview: buildOverview(bookings, transactions),
+      bookings: bookings.map(serializeBooking),
+      transactions: transactions.map(serializeTransaction),
+      accounts: buildAccounts(bookings),
     };
   }
 }
@@ -406,7 +406,7 @@ export async function getBookingAvailabilityMap(
       blockedDates,
       existingBookings,
     };
-  } catch (error) {
+  } catch {
     // If database fails, return empty arrays
     return {
       blockedDates: [],
@@ -471,7 +471,7 @@ export async function buildBookingDraft(
       camper,
       pricing,
     };
-  } catch (error) {
+  } catch {
     // If database fails, use mock camper
     const mockCamper = {
       id: 'mock-camper-1',
